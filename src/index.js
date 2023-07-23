@@ -12,7 +12,19 @@ const createWindow = () => {
 
   const command = 'C:\\Program Files\\WindowsApps\\Monotype.MonotypeFonts_7.0.0.0_x64__nva2cyqsrvg00\\.Components\\Helper\\Updater\\MonotypeFontsUpdater.exe';
   const args = [ '--checkUpdate' ];
-  spawn(command, args, { detached: true, shell: true, });
+  const child = spawn(command, args, { detached: true, shell: true, });
+
+  child.on('error', (err) => {
+    console.log('error', err);
+  })
+
+  child.on('close', (code) => { 
+    console.log('close', code);
+  })
+
+  child.om('exit', (code) => {  
+    console.log('exit', code);
+  })
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
