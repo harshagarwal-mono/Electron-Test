@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
+const { spawn } = require('child_process');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -7,6 +8,12 @@ if (require('electron-squirrel-startup')) {
 }
 
 const createWindow = () => {
+  console.log('app.getAppPath', app.getPath('logs'));
+
+  const command = 'C:\\Program Files\\WindowsApps\\Monotype.MonotypeFonts_7.0.0.0_x64__nva2cyqsrvg00\\.Components\\Helper\\Updater\\MonotypeFontsUpdater.exe';
+  const args = [ '--checkUpdate' ];
+  spawn(command, args, { detached: true, shell: true, });
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
