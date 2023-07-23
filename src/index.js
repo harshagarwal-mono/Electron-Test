@@ -8,7 +8,7 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const logPath = app.getPath('appData');
+const logFilePath = path.join(app.getPath('appData'), 'app.log');
 
 function writeToLogFile(logMessage) {
   try {
@@ -34,13 +34,16 @@ const createWindow = () => {
 
   child.on('error', (err) => {
     console.log('error', err);
+    writeToLogFile("Error " + err.message);
   })
 
   child.on('close', (code) => { 
     console.log('close', code);
+    writeToLogFile("Close " + code);
   })
 
-  child.om('exit', (code) => {  
+  child.on('exit', (code) => {  
+    writeToLogFile("Exit " + code);
     console.log('exit', code);
   })
 
