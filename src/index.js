@@ -1,6 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
-const { spawn } = require('child_process');
+const { spawn, exec } = require('child_process');
 const fs = require('fs');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -28,7 +28,7 @@ function writeToLogFile(logMessage) {
 const createWindow = () => {
   console.log('app.getAppPath', app.getPath('logs'));
 
-  const command = 'C:\\Program Files\\WindowsApps\\Monotype.MonotypeFonts_7.0.0.0_x64__nva2cyqsrvg00\\.Components\\Helper\\Updater\\MonotypeFontsUpdater.exe';
+  const command = '"C:\\Program Files\\WindowsApps\\Monotype.MonotypeFonts_7.0.0.0_x64__nva2cyqsrvg00\\.Components\\Helper\\Updater\\MonotypeFontsUpdater.exe"';
   const args = [ '--checkUpdate' ];
   const child = spawn(command, args, { detached: true, shell: true, });
 
@@ -45,6 +45,16 @@ const createWindow = () => {
   child.on('exit', (code) => {  
     writeToLogFile("Exit " + code);
     console.log('exit', code);
+  })
+
+  exec(`${command} ${args.join(' ')}`, (err, stdout, stderr) => {
+    if (err || stderr) {
+      console.log('err', err);
+      const errorMessage = err ? err.message : stderr;
+      writeToLogFile("Error " + errorMessage);
+    }
+
+    console.log('stdout ', stdout);
   })
 
   // Create the browser window.
