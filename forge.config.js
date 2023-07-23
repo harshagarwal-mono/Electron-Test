@@ -2,6 +2,7 @@ module.exports = {
   packagerConfig: {
     asar: true,
   },
+  name: 'Monotype Fonts',
   rebuildConfig: {},
   makers: [
     {

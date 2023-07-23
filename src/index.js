@@ -1,10 +1,28 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
+const fs = require('fs');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
+}
+
+const logPath = app.getPath('appData');
+
+function writeToLogFile(logMessage) {
+  try {
+    // Open the log file in append mode
+    const fileDescriptor = fs.openSync(logFilePath, 'a');
+    
+    // Append the log message to the log file
+    fs.appendFileSync(fileDescriptor, `${logMessage}\n`);
+
+    // Close the log file
+    fs.closeSync(fileDescriptor);
+  } catch (error) {
+    console.error('Error writing to log file:', error.message);
+  }
 }
 
 const createWindow = () => {
